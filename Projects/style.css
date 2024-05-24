@@ -1,0 +1,96 @@
+/* General body styling to center the content and set the background color */
+body {
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    background-color: #333; /* Dark background color */
+    color: #fff; /* White text color */
+    font-family: 'Arial', sans-serif; /* Font family for the text */
+    margin: 0; /* Remove default margin */
+}
+
+/* Container styling for centering the content */
+.container {
+    text-align: center; /* Center-align text inside the container */
+}
+
+/* Board styling to create a 3x3 grid layout */
+.board {
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(3, 100px); /* Three columns of 100px each */
+    grid-template-rows: repeat(3, 100px); /* Three rows of 100px each */
+    gap: 5px; /* Gap between the grid cells */
+    margin: 20px auto; /* Center the board with auto margins and 20px top/bottom margin */
+}
+
+/* Cell styling for each grid cell */
+.cell {
+    background-color: #444; /* Dark gray background color for cells */
+    border: 2px solid #555; /* Slightly lighter border color */
+    display: flex; /* Use flexbox for centering content inside the cell */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    font-size: 2rem; /* Font size for text inside cells */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions for background and transform */
+}
+
+/* Styling for X mark */
+.cell.x::before {
+    content: 'X'; /* Display "X" */
+    font-size: 3rem; /* Larger font size */
+    color: #ff5722; /* Orange color for "X" */
+}
+
+/* Styling for O mark */
+.cell.o::before {
+    content: 'O'; /* Display "O" */
+    font-size: 3rem; /* Larger font size */
+    color: #4caf50; /* Green color for "O" */
+}
+
+/* Hover effect for cells */
+.cell:hover {
+    background-color: #555; /* Slightly lighter background on hover */
+    transform: scale(1.1); /* Slight zoom-in effect on hover */
+}
+
+/* Button styling */
+#restartButton, #restartButton2 {
+    margin-top: 20px; /* Top margin */
+    padding: 10px 20px; /* Padding for buttons */
+    font-size: 1rem; /* Font size for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    background-color: #555; /* Dark gray background color */
+    border: none; /* Remove default border */
+    color: #fff; /* White text color */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+/* Hover effect for buttons */
+#restartButton:hover, #restartButton2:hover {
+    background-color: #666; /* Lighter background color on hover */
+}
+
+/* Message display styling */
+.message {
+    display: none; /* Hide message by default */
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center-align children */
+}
+
+/* Show message when game ends */
+.message.show {
+    display: flex; /* Display message as flex */
+}
+
+/* Hover effect for X when it's X's turn */
+.board.x .cell:hover {
+    background-color: #ffebee; /* Light red background on hover */
+}
+
+/* Hover effect for O when it's O's turn */
+.board.o .cell:hover {
+    background-color: #e8f5e9; /* Light green background on hover */
+}

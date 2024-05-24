@@ -1,0 +1,268 @@
+Certainly! Adding comments to the code will help you understand how it works and allow you to make improvements. Here is the code with descriptive comments for each section:
+
+### `index.html`
+```html
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ቲክ ታክ ቶ</title>
+    <!-- Link to the CSS file for styling the game -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ቲክ ታክ ቶ</h1>
+        <!-- Game board with 9 cells -->
+        <div class="board" id="board">
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+        </div>
+        <!-- Button to restart the game -->
+        <button id="restartButton">እንደገና ጀምር</button>
+        <!-- Winning message display -->
+        <div class="message" id="winningMessage">
+            <div data-winning-message-text></div>
+            <button id="restartButton2">እንደገና ጀምር</button>
+        </div>
+    </div>
+    <!-- Link to the JavaScript file for game functionality -->
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+### `styles.css`
+```css
+/* General body styling */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #333;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+/* Container styling */
+.container {
+    text-align: center;
+}
+
+/* Board styling to create a 3x3 grid */
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
+    margin: 20px auto;
+}
+
+/* Cell styling for each grid cell */
+.cell {
+    background-color: #444;
+    border: 2px solid #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+/* Styling for X and O */
+.cell.x::before {
+    content: 'X';
+    font-size: 3rem;
+    color: #ff5722; /* Orange color for "X" */
+}
+
+.cell.o::before {
+    content: 'O';
+    font-size: 3rem;
+    color: #4caf50; /* Green color for "O" */
+}
+
+/* Hover effect for cells */
+.cell:hover {
+    background-color: #555;
+    transform: scale(1.1);
+}
+
+/* Button styling */
+#restartButton, #restartButton2 {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #555;
+    border: none;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+#restartButton:hover, #restartButton2:hover {
+    background-color: #666;
+}
+
+/* Message display styling */
+.message {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.message.show {
+    display: flex;
+}
+
+/* Hover effect for X and O */
+.board.x .cell:hover {
+    background-color: #ffebee; /* Light red for "X" hover */
+}
+
+.board.o .cell:hover {
+    background-color: #e8f5e9; /* Light green for "O" hover */
+}
+```
+
+### `script.js`
+```javascript
+// Constants for X and O classes
+const X_CLASS = 'x'
+const O_CLASS = 'o'
+
+// Winning combinations
+const WINNING_COMBINATIONS = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+]
+
+// Selecting all cells and necessary elements
+const cellElements = document.querySelectorAll('[data-cell]')
+const board = document.getElementById('board')
+const winningMessageElement = document.getElementById('winningMessage')
+const restartButton = document.getElementById('restartButton')
+const restartButton2 = document.getElementById('restartButton2')
+const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
+let oTurn // Variable to track whose turn it is
+
+// Start the game
+startGame()
+
+// Event listeners for restart buttons
+restartButton.addEventListener('click', startGame)
+restartButton2.addEventListener('click', startGame)
+
+function startGame() {
+    oTurn = false // X goes first
+    // Clear the board
+    cellElements.forEach(cell => {
+        cell.classList.remove(X_CLASS)
+        cell.classList.remove(O_CLASS)
+        cell.classList.remove('x')
+        cell.classList.remove('o')
+        cell.removeEventListener('click', handleClick)
+        cell.addEventListener('click', handleClick, { once: true })
+    })
+    setBoardHoverClass()
+    winningMessageElement.classList.remove('show')
+}
+
+function handleClick(e) {
+    const cell = e.target
+    const currentClass = oTurn ? O_CLASS : X_CLASS
+    placeMark(cell, currentClass)
+    if (checkWin(currentClass)) {
+        endGame(false)
+    } else if (isDraw()) {
+        endGame(true)
+    } else {
+        swapTurns()
+        setBoardHoverClass()
+    }
+}
+
+function endGame(draw) {
+    if (draw) {
+        winningMessageTextElement.innerText = 'አስተናግዷል!' // Draw message
+    } else {
+        winningMessageTextElement.innerText = `${oTurn ? "O አሸንፏል!" : "X አሸንፏል!"}` // Winning message
+    }
+    winningMessageElement.classList.add('show')
+}
+
+function isDraw() {
+    return [...cellElements].every(cell => {
+        return cell.classList.contains(X_CLASS) || cell.classList.contains(O_CLASS)
+    })
+}
+
+function placeMark(cell, currentClass) {
+    cell.classList.add(currentClass)
+    cell.classList.add(currentClass === X_CLASS ? 'x' : 'o')
+}
+
+function swapTurns() {
+    oTurn = !oTurn
+}
+
+function setBoardHoverClass() {
+    board.classList.remove(X_CLASS)
+    board.classList.remove(O_CLASS)
+    if (oTurn) {
+        board.classList.add(O_CLASS)
+    } else {
+        board.classList.add(X_CLASS)
+    }
+}
+
+function checkWin(currentClass) {
+    return WINNING_COMBINATIONS.some(combination => {
+        return combination.every(index => {
+            return cellElements[index].classList.contains(currentClass)
+        })
+    })
+}
+```
+
+### Explanation of Each Section
+
+#### `index.html`
+- **HTML Structure**: Defines the basic structure of the web page.
+- **Title and Head**: Sets the title of the page and includes the CSS file.
+- **Body**: Contains the game board, buttons, and the winning message section.
+
+#### `styles.css`
+- **Body Styling**: Centers the content and sets the background color.
+- **Container**: Aligns and centers text.
+- **Board**: Creates a 3x3 grid layout for the game board.
+- **Cells**: Styles each cell, adds hover effects, and colors for X and O.
+- **Buttons**: Styles the restart buttons with hover effects.
+- **Message Display**: Handles the styling for the winning/draw message.
+
+#### `script.js`
+- **Constants and Variables**: Defines the classes for X and O, and the winning combinations.
+- **Element Selection**: Selects the necessary HTML elements.
+- **Start Game Function**: Initializes the game, sets up event listeners, and clears the board.
+- **Handle Click Function**: Handles the logic for each click, places marks, checks for wins or draws, and switches turns.
+- **End Game Function**: Displays the winning or draw message.
+- **Helper Functions**: `isDraw`, `placeMark`, `swapTurns`, `setBoardHoverClass`, and `checkWin` handle various game logic aspects.
+
+This commented version should help you understand each part of the code and its role in the game. Feel free to ask if you have any questions or need further clarification!

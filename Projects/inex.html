@@ -6,11 +6,14 @@
     <title>ቲክ ታክ ቶ</title>
     <!-- Link to the CSS file for styling the game -->
     <link rel="stylesheet" href="style.css">
+    <!-- Link to Google Fonts for additional styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Main container for the game -->
     <div class="container">
-        <h1>ቲክ ታክ ቶ</h1>
-        <!-- Game board with 9 cells -->
+        <h1>🎮 ቲክ ታክ ቶ 🎮</h1>
+        <!-- Game board with 9 cells for tic-tac-toe -->
         <div class="board" id="board">
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
@@ -23,13 +26,19 @@
             <div class="cell" data-cell></div>
         </div>
         <!-- Button to restart the game -->
-        <button id="restartButton">እንደገና ጀምር</button>
+        <button id="restartButton">🔄 እንደገና ጀምር</button>
         <!-- Winning message display -->
         <div class="message" id="winningMessage">
             <div data-winning-message-text></div>
-            <button id="restartButton2">እንደገና ጀምር</button>
+            <button id="restartButton2">🔄 እንደገና ጀምር</button>
         </div>
     </div>
+
+    <!-- Animated background elements -->
+    <div class="animation">
+        <img src="https://source.unsplash.com/random/400x400" alt="Random Image" class="background-image">
+    </div>
+
     <!-- Link to the JavaScript file for game functionality -->
     <script src="script.js"></script>
 </body>

@@ -1,3 +1,4 @@
+//let us do the css part
 // Define constants for the X and O classes
 const X_CLASS = 'x';
 const O_CLASS = 'o';

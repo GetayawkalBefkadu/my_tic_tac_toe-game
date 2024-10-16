@@ -4,7 +4,7 @@ body {
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     height: 100vh; /* Full viewport height */
-    background: linear-gradient(45deg, #120909, #555); /* Background gradient */
+    background: linear-gradient(45deg, #120909, #eea912); /* Background gradient */
     color: #fff; /* White text color */
     font-family: 'Roboto', sans-serif; /* Font family for the text */
     overflow: hidden; /* Prevent overflow */
